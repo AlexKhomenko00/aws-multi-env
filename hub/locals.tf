@@ -15,4 +15,10 @@ locals {
   workload_account_ids = {
     for k, p in data.aws_ssm_parameter.account_id : k => p.insecure_value
   }
+
+  live_attachment_states = ["initiating", "initiatingRequest", "pendingAcceptance", "pending", "available", "modifying", "rollingBack"]
+
+  spoke_attachment_ids = {
+    for k, d in data.aws_ec2_transit_gateway_attachments.spoke : k => d.ids[0] if length(d.ids) > 0
+  }
 }
