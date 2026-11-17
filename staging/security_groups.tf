@@ -82,6 +82,14 @@ resource "aws_vpc_security_group_ingress_rule" "rds_from_catalog" {
   to_port                      = 3306
 }
 
+resource "aws_vpc_security_group_ingress_rule" "rds_from_hub" {
+  security_group_id = aws_security_group.rds.id
+  cidr_ipv4         = module.network_plan.vpc_cidrs["hub"]
+  ip_protocol       = "tcp"
+  from_port         = 3306
+  to_port           = 3306
+}
+
 resource "aws_vpc_security_group_egress_rule" "app_https_out" {
   for_each = { ui = aws_security_group.ui.id, catalog = aws_security_group.catalog.id }
 
